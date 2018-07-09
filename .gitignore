@@ -1,0 +1,5 @@
+*.db
+snapshots
+*.pyc
+.venv/*
+__pycache__

@@ -3,20 +3,12 @@ SQLite3 backend for the sqlite3 module in the standard library.
 """
 import decimal
 import math
-import re
-import warnings
-#from sqlite3 import dbapi2 as Database
-import pyrqlite.dbapi2  as Database
-from pyrqlite.cursors import Cursor as DBCursor
-Database.Cursor = DBCursor
-
-#import logging
-#logger = logging.getLogger(__name__)
-#logger.setLevel(loggin.)
-
 import pytz
+import re
+import pyrqlite.dbapi2 as Database
+from pyrqlite.cursors import Cursor as DBCursor
 
-from django.core.exceptions import ImproperlyConfigured
+
 from django.db import utils
 from django.db.backends import utils as backend_utils
 from django.db.backends.base.base import BaseDatabaseWrapper
@@ -32,6 +24,8 @@ from .introspection import DatabaseIntrospection            # isort:skip
 from .operations import DatabaseOperations                  # isort:skip
 from .schema import DatabaseSchemaEditor                    # isort:skip
 
+Database.Cursor = DBCursor
+
 
 def decoder(conv_func):
     """
@@ -39,17 +33,6 @@ def decoder(conv_func):
     """
     return lambda s: conv_func(s.decode())
 
-
-#Database.register_converter("bool", lambda s: s == b'1')
-#Database.register_converter("time", decoder(parse_time))
-#Database.register_converter("date", decoder(parse_date))
-#Database.register_converter("datetime", decoder(parse_datetime))
-#Database.register_converter("timestamp", decoder(parse_datetime))
-#Database.register_converter("TIMESTAMP", decoder(parse_datetime))
-#Database.register_converter("decimal", decoder(decimal.Decimal))
-#
-#Database.register_adapter(decimal.Decimal, backend_utils.rev_typecast_decimal)
-#
 
 class DatabaseWrapper(BaseDatabaseWrapper):
     vendor = 'rqlite'
@@ -136,26 +119,12 @@ class DatabaseWrapper(BaseDatabaseWrapper):
     ops_class = DatabaseOperations
 
     def get_connection_params(self):
-        return { 'host':self.settings_dict.get('HOST', 'localhost'),
-                  'port':self.settings_dict.get('HOST', 4001) }
+        return {'host': self.settings_dict.get('HOST', 'localhost'),
+                'port': self.settings_dict.get('HOST', 4001)}
 
     def get_new_connection(self, conn_params):
         print ("the params are :{0}".format(conn_params.items()))
         conn = Database.connect(**conn_params)
-#        conn.create_function("django_date_extract", 2, _sqlite_date_extract)
-#        conn.create_function("django_date_trunc", 2, _sqlite_date_trunc)
-#        conn.create_function("django_datetime_cast_date", 2, _sqlite_datetime_cast_date)
-#        conn.create_function("django_datetime_cast_time", 2, _sqlite_datetime_cast_time)
-#        conn.create_function("django_datetime_extract", 3, _sqlite_datetime_extract)
-#        conn.create_function("django_datetime_trunc", 3, _sqlite_datetime_trunc)
-#        conn.create_function("django_time_extract", 2, _sqlite_time_extract)
-#        conn.create_function("django_time_trunc", 2, _sqlite_time_trunc)
-#        conn.create_function("django_time_diff", 2, _sqlite_time_diff)
-#        conn.create_function("django_timestamp_diff", 2, _sqlite_timestamp_diff)
-#        conn.create_function("regexp", 2, _sqlite_regexp)
-#        conn.create_function("django_format_dtdelta", 3, _sqlite_format_dtdelta)
-#        conn.create_function("django_power", 2, _sqlite_power)
-#        conn.execute('PRAGMA foreign_keys = ON')
         return conn
 
     def init_connection_state(self):

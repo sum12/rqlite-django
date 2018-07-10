@@ -162,7 +162,6 @@ class DatabaseWrapper(BaseDatabaseWrapper):
         pass
 
     def create_cursor(self, name=None):
-        #return self.connection.cursor(factory=SQLiteCursorWrapper)
         return self.connection.cursor()
 
     def close(self):
@@ -268,29 +267,6 @@ class DatabaseWrapper(BaseDatabaseWrapper):
 
     def is_in_memory_db(self):
         return self.creation.is_in_memory_db(self.settings_dict['NAME'])
-
-
-FORMAT_QMARK_REGEX = re.compile(r'(?<!%)%s')
-
-
-class SQLiteCursorWrapper(Database.Cursor):
-    """
-    Django uses "format" style placeholders, but pysqlite2 uses "qmark" style.
-    This fixes it -- but note that if you want to use a literal "%s" in a query,
-    you'll need to use "%%s".
-    """
-    def execute(self, query, params=None):
-        if params is None:
-            return Database.Cursor.execute(self, query)
-        query = self.convert_query(query)
-        return Database.Cursor.execute(self, query, params)
-
-    def executemany(self, query, param_list):
-        query = self.convert_query(query)
-        return Database.Cursor.executemany(self, query, param_list)
-
-    def convert_query(self, query):
-        return FORMAT_QMARK_REGEX.sub('?', query).replace('%%', '%')
 
 
 def _sqlite_date_extract(lookup_type, dt):

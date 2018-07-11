@@ -121,11 +121,12 @@ class DatabaseWrapper(BaseDatabaseWrapper):
     def get_connection_params(self):
         opts = self.settings_dict['OPTIONS']
         ret = {'host': opts.get('HOST', 'localhost'),
-                    'port': opts.get('PORT', 4001)}
-        return  ret
+               'port': opts.get('PORT', 4001),
+               'always_transactions': False
+               }
+        return ret
 
     def get_new_connection(self, conn_params):
-        print ("the params are :{0}".format(conn_params.items()))
         conn = Database.connect(**conn_params)
         return conn
 

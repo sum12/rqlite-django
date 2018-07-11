@@ -234,9 +234,7 @@ class DatabaseWrapper(BaseDatabaseWrapper):
         Staying in autocommit mode works around a bug of sqlite3 that breaks
         savepoints when autocommit is disabled.
         """
-        # FIXME(sum12):  I have no clue why commenting this is bad idea,
-        # but it somewhy makes the backend work
-        #self.cursor().execute("BEGIN")
+        self.cursor().execute("BEGIN")
 
     def is_in_memory_db(self):
         return self.creation.is_in_memory_db(self.settings_dict['NAME'])

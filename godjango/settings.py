@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'app'
+    'jujuju'
 ]
 
 MIDDLEWARE = [
@@ -77,8 +77,10 @@ WSGI_APPLICATION = 'godjango.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'app.rqlite',
+#        'ENGINE': 'django.db.backends.sqlite3',
+#        'NAME': 'db.sqlite3',
+        }
     }
-}
 
 
 # Password validation
